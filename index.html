@@ -1,0 +1,168 @@
+<html>
+   
+
+    <head>
+        <script src="http://code.jquery.com/jquery-1.11.3.min.js"></script>
+        <script src="http://code.jquery.com/ui/1.11.4/jquery-ui.min.js"></script>
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.2/jquery.min.js"></script>
+        <script src="https://files.codepedia.info/files/uploads/iScripts/html2canvas.js"
+        crossorigin="anonymous"></script>
+        <script src="references/html2canvas.js"></script>
+    </head>
+
+    <body>
+        
+        <div id="img" style="background-image:url('images/olu.jpg');background-repeat: no-repeat;
+         height: 1050px; /* You must set a specified height */
+         width: 1000px;
+        
+         background-position: center; /* Center the image */
+         background-repeat: no-repeat; /* Do not repeat the image */
+         background-size: cover; /* Resize the background image to cover the entire container */ position:relative;
+         margin:0 auto; line-height: 1.4em;">
+        <div>
+
+                <img id="imgsrc"  alt=""
+                crossOrigin = "anonymous"
+                style="width: 280px;
+                background-color:transparent;
+                margin-left: 1px;
+                position:relative;
+                margin-top: 620px;
+                margin-left: 100px;
+                border-radius: 50%;
+                height: 300px;"
+                
+                />
+                <br/>
+                <br/>
+                <br/>
+                <br/>
+                <input type="text" id="imgname" width="500px" style=" margin-left: 85px;width: 300px; color: black; font-size: xx-large; font-weight: bolder;
+                word-wrap: break-word; text-align: center;
+                                          margin-right: 90px; background-color: transparent;
+                                           border-top:3px;border-right:3px;border-left:3px;"/>
+           
+        </div>
+
+        <img id="imagetodownload" alt="" style="visibility: hidden;"/>
+           
+        
+       
+         </div>
+           <center>
+            <br/>
+            <p id="dvgenerate">Enter Name: <input type="text" id='txtname' style="width: 300px;"/> &nbsp;&nbsp;  Select Image  <input type='file' id="imgInp" accept="image/*" /></p>
+             
+             <div id="dvgeneratebtn">
+                <br/>
+               <button id="btnGeneratedp">Generate Display Picture</button>
+             </div>
+             </center>
+
+             <div>
+                <img src="" id="mirror" class="canvas__mirror" />
+             </div>
+    </body>
+</html>
+
+<script type="text/javascript">
+
+// $("#imgInp").change(function(){
+//         readURL(this);
+//     });
+
+$('#txtname').keyup(function(){
+    if(this.value.toString().length>15)
+    {
+        alert('Name Cannot Be More Than 15 Characters');
+        return;
+    }
+$('#imgname').val(this.value)
+})
+function readURL(input) {
+        if (input.files && input.files[0]) {
+            var i;
+            for (i = 0; i < input.files.length; ++i) {
+              var reader = new FileReader();
+              reader.onload = function (e) {
+
+                  var output = document.getElementById('imgsrc');
+                     output.src = e.target.result;
+                    makeScreenshot();
+                    $('#img').hide();
+                    $('#imgInp').hide();
+                    $('#dvgenerate').hide();
+                    $('#dvgeneratebtn').hide();
+                    
+              }
+              reader.readAsDataURL(input.files[i]);
+            }
+        }
+    }
+    function makeScreenshot() {
+        html2canvas(document.getElementById("img"), 
+            {
+                useCORS : true,
+                allowTaint : false,
+
+            }
+        )
+        .then(canvas => {
+            
+            var imagetodownload=document.getElementById('imagetodownload');
+            canvas.id="CanvasID"
+            var x = document.createElement("BUTTON");
+            var t = document.createTextNode("Click here to upload again");
+            // x.appendChild(t);
+            // x.style.marginLeft="5%"
+            x.onclick=(function(){
+                location.reload();
+            })
+
+            var x1 = document.createElement("BUTTON");
+            var t1 = document.createTextNode("Download");
+            x1.appendChild(t1);
+            x1.style.marginLeft="5%"
+
+            const pageImage = new Image();
+
+
+            x1.onclick=(function(){
+               var canvasElement= document.getElementById('CanvasID');
+               console.log(canvasElement)
+            var imgageData = canvasElement.toDataURL();
+
+
+          var a = document.createElement("a"); //Create <a>
+          a.href = imgageData; //Image Base64 Goes here
+          a.download = "Image.png"; //File name Here
+          a.click(); //Downloaded file
+           // Canvas2Image.saveAsPNG(canvasElement, canvasElement.width, canvasElement.height)
+                
+            
+            })
+           
+            document.body.appendChild(canvas);
+            document.body.appendChild(x);
+            document.body.appendChild(x1);
+            document.body.style.marginLeft = "10%";
+        });
+    }    
+
+    $('#btnGeneratedp').click(function (){
+        if($('#txtname').val()==='')
+        {
+            alert('Please Enter A Valid Name');
+            return;
+        }
+        if($('#imgInp').val()==='')
+        {
+            alert('Please Select A Valid File');
+            return;
+        }
+
+        var imagepath=document.getElementById('imgInp');
+        readURL(imagepath);
+    })
+</script>
